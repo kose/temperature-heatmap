@@ -82,16 +82,16 @@ def main():
     
     # 場所をラジオボタンで選択
     from scraping import url_dic
-    place = st.radio('場所を選択してください', url_dic.keys(), index=3, horizontal=True)
+    place = st.radio('場所を選択してください', url_dic.keys(), index=2, horizontal=True)
 
     # 表示方法を選択
     show_type = st.radio('表示方法を選択してください', ['通常ヒートマップ', '5度刻み'], index=1, horizontal=True)
 
     # ヒートマップを描画
-    fig = show_heatmap(place, show_type)
+    plt = show_heatmap(place, show_type)
 
     # グラフを表示
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(plt, use_container_width=True)
 
 
 if __name__ == '__main__':
