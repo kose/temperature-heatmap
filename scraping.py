@@ -103,7 +103,7 @@ def create_csv(place, year):
 if __name__ == '__main__':
 
     for place in url_dic.keys():
-        for year in range(2024, 1871, -1):
+        for year in range(2025, 1871, -1):
             create_csv(place, year)
 
 # import pdb; pdb.set_trace()
