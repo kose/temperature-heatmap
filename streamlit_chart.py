@@ -3,8 +3,22 @@ import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import japanize_matplotlib
 import seaborn as sns
+
+# 日本語フォントの設定
+# macOS環境を想定し、Hiragino Sansを優先
+try:
+    import matplotlib.font_manager as fm
+    fm.findfont('Hiragino Sans')
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['font.sans-serif'] = ['Hiragino Sans']
+except:
+    try:
+        fm.findfont('Meiryo')
+        plt.rcParams['font.family'] = 'sans-serif'
+        plt.rcParams['font.sans-serif'] = ['Meiryo', 'MS Gothic']
+    except:
+        print("警告: 日本語フォントが見つかりませんでした。文字化けする可能性があります。")
 
 ##
 ## CSVファイルを読み込む(場所ごとの気温データ)
@@ -91,7 +105,7 @@ def main():
     plt = show_heatmap(place, show_type)
 
     # グラフを表示
-    st.pyplot(plt, use_container_width=True)
+    st.pyplot(plt, width='stretch')
 
 
 if __name__ == '__main__':
