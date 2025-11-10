@@ -39,8 +39,8 @@ def read_temperature(place):
     # csv ファイルを読み込みこみ、ひとつのデータフレームに結合
     df = pd.concat([pd.read_csv(f'{resource_dir}/{file}') for file in csv_files], ignore_index=True)
 
-    # nanを含む行を削除
-    df = df.dropna()
+    # nanを含む行を削除 （抜けはないので必要ないみたい）
+    # df = df.dropna()
 
     return df
 
@@ -57,8 +57,6 @@ def show_heatmap(place, show_type):
     # temp= '最高気温'
     df = df[['年月日', temp]]
 
-    # 最初の年を取得
-    first_year = int(df['年月日'].str[:4].min())
     
     # 5度刻みで色分けされるようにする
     if show_type == '5度刻み':
@@ -68,12 +66,20 @@ def show_heatmap(place, show_type):
     plt.figure(figsize=(20, 10))
 
     # cmapの値は、https://matplotlib.org/stable/tutorials/colors/colormaps.html から選択
-    colormap = 'jet'
-    sns.heatmap(df.pivot_table(index=df['年月日'].str[:4], columns=df['年月日'].str[5:], values=temp, aggfunc='mean'), cmap=colormap)
+    # colormap = 'jet'
+    colormap = 'turbo'
+    min_value = -10
+    max_value = 35
+    sns.heatmap(df.pivot_table(index=df['年月日'].str[:4], columns=df['年月日'].str[5:], values=temp, aggfunc='mean'),
+                cmap=colormap, vmin=min_value, vmax=max_value)
 
+    # データの範囲
+    first_year = int(df['年月日'].str[:4].min())
+    last_year = int(df['年月日'].str[:4].max())
 
-    # y軸のラベルは、10年ごとに表示、first_year から 2024年まで
-    plt.yticks(ticks=range(0, 2024 - first_year, 10), labels=[str(year) for year in range(first_year, 2024, 10)])
+    # y軸のラベルは、10年ごとに表示 FIXME: y軸メモリがずれる
+    # plt.yticks(ticks=range(0, last_year - first_year, 10), labels=[str(year) for year in range(first_year, last_year, 10)])
+
     plt.ylabel('年')
 
     # X軸のラベルは、月ごとに表示
